@@ -17,7 +17,8 @@ public class Joint {
 
 	// Updates the link's transformations based on the animation
 	public void Update () {
-		this.rotation = anim.GetRotation();
+		this.rotation = new Vector3(0, 0, 20);
+		// this.rotation = anim.GetRotation(); FOR TESTING PURPOSES
 		this.translation = anim.GetTranslation();
 	}
 

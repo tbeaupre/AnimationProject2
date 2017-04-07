@@ -19,25 +19,17 @@ public class ChildLink : Link {
 	public void Init(Vector3 parentPos, Vector3 parentRot)
 	{
 		this.modelRotation = transform.eulerAngles - parentRot; // This is the base rotation for this link's model
-		this.joint = new Joint((transform.position + modelOrigin) - parentPos, this.anim); // Accounts for model origin and finds offset from parent
+		this.joint = new Joint((transform.position + modelOriginOffset) - parentPos, this.anim); // Accounts for model origin and finds offset from parent
 		base.Init(); // Initializes children
 	}
 
 	// Updates the child's transforms based on joint's transformation
-	public override void UpdateLocalTransforms()
+	public override void UpdateJointTransforms()
 	{
 		joint.Update(); // Since the joint isn't a MonoBehavior and doesn't get updated automatically
 
 		// Complete local transformation (rotation first, translation second)
-		RotateAround(modelOrigin, joint.GetRotation());
+		RotateAround(modelOriginOffset, joint.GetRotation());
 		Translate(joint.GetTranslation());
-	}
-
-	// Rotates the model around a point in space using euler angles. Uses ZXY order
-	public void RotateAround(Vector3 point, Vector3 euler)
-	{
-		transform.RotateAround(point, new Vector3(0, 0, 1), euler.z);
-		transform.RotateAround(point, new Vector3(1, 0, 0), euler.x);
-		transform.RotateAround(point, new Vector3(0, 1, 0), euler.y);
 	}
 }
