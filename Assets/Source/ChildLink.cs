@@ -17,14 +17,15 @@ public class ChildLink : Link {
 	protected override void Init(Vector3 parentTranslate, Vector3 parentRotate)
 	{
 		this.modelRotation = transform.eulerAngles - parentRotate;
-		this.joint = new Joint(transform.position);
+		this.joint = new Joint(transform.position - parentTranslate);
+		// Init the children
 		base.Init(parentTranslate, parentRotate);
 	}
 
 	public override void UpdateLocalTransforms()
 	{
 		// Complete local transformation (rotation first, translation second)
-		transform.Rotate(joint.GetRotation());
-		transform.Translate(joint.GetTranslation());
+		transform.Rotate(joint.GetRotation(), Space.World);
+		transform.Translate(joint.GetTranslation(), Space.World);
 	}
 }

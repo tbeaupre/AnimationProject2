@@ -25,7 +25,7 @@ public abstract class Link : MonoBehaviour {
 	}
 
 	// Updates the link's position
-	public void UpdateLink(Vector3 translate, Vector3 rotate) {
+	public void UpdateLink(Vector3 parentPos, Vector3 parentRot) {
 		// Reset to origin with no rotation
 		transform.position = new Vector3(0, 0, 0);
 		transform.eulerAngles = modelRotation;
@@ -34,8 +34,8 @@ public abstract class Link : MonoBehaviour {
 		UpdateLocalTransforms();
 
 		// Complete parent transformation (rotation first, translation second)
-		transform.Rotate(rotate);
-		transform.Translate(translate);
+		transform.Rotate(parentRot, Space.World);
+		transform.Translate(parentPos, Space.World);
 
 		// Update each child node using the newly calculated rotations and translations
 		foreach (Link child in this.children)
