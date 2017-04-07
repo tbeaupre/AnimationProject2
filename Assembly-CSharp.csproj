@@ -53,6 +53,8 @@
      <Compile Include="Assets\Source\Spline.cs" />
      <Compile Include="Assets\Source\SplineObj.cs" />
      <Compile Include="Assets\Source\SplineTraveler.cs" />
+     <Compile Include="Assets\Source\Test.cs" />
+     <Compile Include="Assets\Source\Test2.cs" />
      <Compile Include="Assets\Source\Timer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
