@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Link : MonoBehaviour {
 	[SerializeField] protected Vector3 modelRotation = new Vector3(0, 0, 0); // The model's rotation
+	[SerializeField] protected Vector3 modelOrigin = new Vector3(0, 0, 0); // The model's origin
 	[SerializeField] protected List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
 
 	// Use this for initialization
@@ -16,26 +17,26 @@ public abstract class Link : MonoBehaviour {
 		
 	}
 
-	protected virtual void Init(Vector3 parentTranslate, Vector3 parentRotate)
+	protected virtual void Init(Link parent)
 	{
 		foreach (ChildLink child in this.children)
 		{
-			child.Init(this.transform.position, this.transform.eulerAngles);
+			child.Init(this);
 		}
 	}
 
 	// Updates the link's position
 	public void UpdateLink(Vector3 parentPos, Vector3 parentRot) {
-		// Reset to origin with no rotation
-		transform.position = new Vector3(0, 0, 0);
+		// Reset to model origin and model rotation
+		transform.position = -modelOrigin;
 		transform.eulerAngles = modelRotation;
 
 		// Complete local transformation
 		UpdateLocalTransforms();
 
 		// Complete parent transformation (rotation first, translation second)
-		transform.Rotate(parentRot, Space.World);
-		transform.Translate(parentPos, Space.World);
+		Rotate(parentRot);
+		Translate(parentPos);
 
 		// Update each child node using the newly calculated rotations and translations
 		foreach (Link child in this.children)
@@ -50,5 +51,15 @@ public abstract class Link : MonoBehaviour {
 		 * 	Root: World transformation and translation
 		 * 	Child: Joint transformation
 		*/
+	}
+
+	public virtual void Rotate(Vector3 euler)
+	{
+		transform.eulerAngles += euler;
+	}
+
+	public virtual void Translate(Vector3 offset)
+	{
+		transform.position += offset;
 	}
 }

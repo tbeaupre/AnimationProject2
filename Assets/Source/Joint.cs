@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Joint : MonoBehaviour {
-	[SerializeField] private Vector3 posOffset = new Vector3(0, 0, 0); // The link origin's positional offset from the parent
-	[SerializeField] private Vector3 translation = new Vector3(0, 0, 0); // The change in the link's translation
-	[SerializeField] private Vector3 rotation = new Vector3(0, 0, 0); // The change in the link's rotation
+public class Joint {
+	Vector3 posOffset; // The link origin's positional offset from the parent
+	Vector3 translation = new Vector3(0, 0, 0); // The change in the link's translation
+	Vector3 rotation = new Vector3(0, 0, 0); // The change in the link's rotation
+	JointAnim anim;
 
-	public Joint (Vector3 posOffset)
+	public Joint (Vector3 posOffset, JointAnim anim)
 	{
 		this.posOffset = posOffset;
+		this.anim = anim;
 	}
 
-	// Use this for initialization
-	void Start () { }
-	
-	// Update is called once per frame
-	void Update () { }
+	public void Update () {
+		this.rotation = anim.GetRotation();
+	}
 
 	public Vector3 GetTranslation()
 	{

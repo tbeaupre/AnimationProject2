@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ChildLink : Link {
-	[SerializeField] private Joint joint; // The joint which this link comes from
+	private Link parent;
+	[SerializeField] Joint joint; // The joint which this link comes from
+	[SerializeField] Vector3 arcRot;
+	[SerializeField] Vector3 arcTrans;
+	[SerializeField] JointAnim anim = new JointAnim(); // The animation that will affect this link
 
 	// Use this for initialization
 	void Start() {
@@ -14,18 +18,29 @@ public class ChildLink : Link {
 		
 	}
 
-	protected override void Init(Vector3 parentTranslate, Vector3 parentRotate)
+	protected override void Init(Link parent)
 	{
-		this.modelRotation = transform.eulerAngles - parentRotate;
-		this.joint = new Joint(transform.position - parentTranslate);
+		this.parent = parent;
+		this.modelRotation = transform.eulerAngles - parent.transform.eulerAngles;
+		this.joint = new Joint((transform.position + modelOrigin) - parent.transform.position, this.anim);
 		// Init the children
-		base.Init(parentTranslate, parentRotate);
+		base.Init(parent);
 	}
 
 	public override void UpdateLocalTransforms()
 	{
+		joint.Update();
+		arcRot = joint.GetRotation();
+		arcTrans = joint.GetTranslation();
 		// Complete local transformation (rotation first, translation second)
-		transform.Rotate(joint.GetRotation(), Space.World);
-		transform.Translate(joint.GetTranslation(), Space.World);
+		RotateAround(modelOrigin, arcRot);
+		Translate(arcTrans);
+	}
+
+	public void RotateAround(Vector3 point, Vector3 euler)
+	{
+		transform.RotateAround(point, new Vector3(0, 0, 1), euler.z);
+		transform.RotateAround(point, new Vector3(1, 0, 0), euler.x);
+		transform.RotateAround(point, new Vector3(0, 1, 0), euler.y);
 	}
 }

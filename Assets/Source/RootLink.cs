@@ -6,7 +6,7 @@ public class RootLink : Link {
 
 	// Use this for initialization
 	void Start () {
-		this.Init(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+		this.Init(this);
 	}
 	
 	// Update is called once per frame
