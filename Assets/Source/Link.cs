@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Link : MonoBehaviour {
-	[SerializeField] private List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
+	[SerializeField] protected Vector3 modelRotation = new Vector3(0, 0, 0); // The model's rotation
+	[SerializeField] protected List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
 
 	// Use this for initialization
 	void Start () {
@@ -15,11 +16,19 @@ public abstract class Link : MonoBehaviour {
 		
 	}
 
+	protected virtual void Init(Vector3 parentTranslate, Vector3 parentRotate)
+	{
+		foreach (ChildLink child in this.children)
+		{
+			child.Init(this.transform.position, this.transform.eulerAngles);
+		}
+	}
+
 	// Updates the link's position
 	public void UpdateLink(Vector3 translate, Vector3 rotate) {
 		// Reset to origin with no rotation
 		transform.position = new Vector3(0, 0, 0);
-		transform.eulerAngles = new Vector3(0, 0, 0);
+		transform.eulerAngles = modelRotation;
 
 		// Complete local transformation
 		UpdateLocalTransforms();

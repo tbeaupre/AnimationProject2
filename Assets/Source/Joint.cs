@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Joint : MonoBehaviour {
-	[SerializeField] private Vector3 offset = new Vector3(0, 0, 0); // The link origin's offset from the parent
-	private Vector3 translation = new Vector3(0, 0, 0); // The change in the link's translation
-	private Vector3 rotation = new Vector3(0, 0, 0); // The change in the link's rotation
+	[SerializeField] private Vector3 posOffset = new Vector3(0, 0, 0); // The link origin's positional offset from the parent
+	[SerializeField] private Vector3 translation = new Vector3(0, 0, 0); // The change in the link's translation
+	[SerializeField] private Vector3 rotation = new Vector3(0, 0, 0); // The change in the link's rotation
 
-	public Joint () { }
+	public Joint (Vector3 posOffset)
+	{
+		this.posOffset = posOffset;
+	}
 
 	// Use this for initialization
 	void Start () { }
@@ -17,7 +20,7 @@ public class Joint : MonoBehaviour {
 
 	public Vector3 GetTranslation()
 	{
-		return (this.offset + this.translation);
+		return (this.posOffset + this.translation);
 	}
 
 	public Vector3 GetRotation()
