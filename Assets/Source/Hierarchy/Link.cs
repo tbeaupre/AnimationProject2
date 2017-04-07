@@ -5,9 +5,7 @@ using UnityEngine;
 // A link in the model hierarchy
 public abstract class Link : MonoBehaviour {
 	[SerializeField] protected Vector3 modelRotation = new Vector3(0, 0, 0); // The model's rotation
-	[SerializeField] protected Vector3 modelOriginOffset = new Vector3(0, 0, 0); // The model's origin offset vector
 	[SerializeField] protected Vector3 parentOriginOffset = new Vector3(0, 0, 0); // This link's offset vector from the parent's mesh's origin
-	[SerializeField] protected Vector3 modelOrigin = new Vector3(0, 0, 0); // The model's origin
 	[SerializeField] protected List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
 
 	// Use this for initialization
@@ -29,9 +27,7 @@ public abstract class Link : MonoBehaviour {
 		
 		// Reset to model origin and model rotation
 		transform.position = new Vector3(0, 0, 0);
-		transform.eulerAngles = new Vector3(0, 0, 0);
-
-		//ModelTransforms();
+		transform.eulerAngles = modelRotation;
 
 		JointTransforms();
 
@@ -44,12 +40,6 @@ public abstract class Link : MonoBehaviour {
 		}
 	}
 
-	public void ModelTransforms() {
-		transform.Translate(-modelOriginOffset, Space.World);
-		// Might need to use (0,0,0) here since you've already translated the model!
-		RotateAround(modelOrigin, modelRotation);
-	}
-
 	// Updates the link's local rotation and translation
 	public virtual void JointTransforms() {
 		/* Override this to add in either:
@@ -59,17 +49,19 @@ public abstract class Link : MonoBehaviour {
 	}
 
 	public void ParentTransforms(Vector3 parentPos, Vector3 parentRot) {
-		Vector3 parentRotatedOriginOffset = Quaternion.Euler(parentRot) * parentOriginOffset;
-		transform.Translate(parentPos + parentRotatedOriginOffset);
-		RotateAround((parentPos - parentRotatedOriginOffset), parentRot);
+		Rotate(parentRot);
+		//transform.Rotate(parentRot);
+		transform.Translate(parentPos);
+		//Vector3 parentRotatedOriginOffset = Quaternion.Euler(parentRot) * parentOriginOffset;
+		//transform.Translate(parentPos + parentRotatedOriginOffset);
 	}
 
-	// Rotates the model around a point in space using euler angles. Uses ZXY order
-	public void RotateAround(Vector3 point, Vector3 euler)
+	// Rotates the model around a point in space using euler angles. Uses XYZ order
+	public void Rotate(Vector3 euler)
 	{
-		transform.RotateAround(point, new Vector3(0, 0, 1), euler.z);
-		transform.RotateAround(point, new Vector3(1, 0, 0), euler.x);
-		transform.RotateAround(point, new Vector3(0, 1, 0), euler.y);
+		transform.Rotate(euler.x, 0, 0);
+		transform.Rotate(0, euler.y, 0);
+		transform.Rotate(0, 0, euler.z);
 	}
 
 	public virtual void Translate(Vector3 offset)

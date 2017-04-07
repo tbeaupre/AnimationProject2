@@ -26,8 +26,8 @@ public class Joint {
 		return this.translation;
 	}
 
-	public Vector3 GetRotation()
+	public Quaternion GetRotation()
 	{
-		return this.rotation;
+		return Quaternion.Euler(this.rotation);
 	}
 }
