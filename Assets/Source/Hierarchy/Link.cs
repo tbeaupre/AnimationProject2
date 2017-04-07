@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class Link : MonoBehaviour {
 	[SerializeField] protected Vector3 modelRotation = new Vector3(0, 0, 0); // The model's rotation
 	[SerializeField] protected Vector3 modelOriginOffset = new Vector3(0, 0, 0); // The model's origin offset vector
+	[SerializeField] protected Vector3 parentOriginOffset = new Vector3(0, 0, 0); // This link's offset vector from the parent's mesh's origin
 	[SerializeField] protected Vector3 modelOrigin = new Vector3(0, 0, 0); // The model's origin
 	[SerializeField] protected List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
 
@@ -24,45 +25,43 @@ public abstract class Link : MonoBehaviour {
 	}
 
 	// Updates the link's position
-	public void UpdateLink(Vector3 parentPos, Vector3 parentRot, Vector3 parentOriginOffset) {
-		//Vector3 rotatedParentOriginOffset = Quaternion.Euler(parentRot) * parentOriginOffset;
-		Vector3 rotatedOriginOffset = transform.Rotate * modelOriginOffset;
-		modelOrigin = transform.position - rotatedOriginOffset;
-
+	public void UpdateLink(Vector3 parentPos, Vector3 parentRot) {
+		
 		// Reset to model origin and model rotation
 		transform.position = new Vector3(0, 0, 0);
 		transform.eulerAngles = new Vector3(0, 0, 0);
 
-		UpdateModelTransforms();
+		//ModelTransforms();
 
-		UpdateJointTransforms();
+		JointTransforms();
 
-		// Complete parent transformation (rotation first, translation second)
-		// FOR TESTING PURPOSES
-		//RotateAround((parentPos), parentRot);
-		//RotateAround((parentPos + parentOrigin), parentRot);
-		RotateAround((parentPos - parentOriginOffset), parentRot);
-		Translate(parentPos);
+		ParentTransforms(parentPos, parentRot);
 
 		// Update each child node using the newly calculated rotations and translations
 		foreach (Link child in this.children)
 		{
-			child.UpdateLink(transform.position, transform.eulerAngles, modelOriginOffset);
+			child.UpdateLink(transform.position, transform.eulerAngles);
 		}
 	}
 
-	public void UpdateModelTransforms() {
-		Vector3 modelOrigin = -modelOriginOffset;
-		transform.Translate(modelOriginOffset, Space.World);
+	public void ModelTransforms() {
+		transform.Translate(-modelOriginOffset, Space.World);
+		// Might need to use (0,0,0) here since you've already translated the model!
 		RotateAround(modelOrigin, modelRotation);
 	}
 
 	// Updates the link's local rotation and translation
-	public virtual void UpdateJointTransforms() {
+	public virtual void JointTransforms() {
 		/* Override this to add in either:
 		 * 	Root: World transformation and translation
 		 * 	Child: Joint transformation
 		*/
+	}
+
+	public void ParentTransforms(Vector3 parentPos, Vector3 parentRot) {
+		Vector3 parentRotatedOriginOffset = Quaternion.Euler(parentRot) * parentOriginOffset;
+		transform.Translate(parentPos + parentRotatedOriginOffset);
+		RotateAround((parentPos - parentRotatedOriginOffset), parentRot);
 	}
 
 	// Rotates the model around a point in space using euler angles. Uses ZXY order
