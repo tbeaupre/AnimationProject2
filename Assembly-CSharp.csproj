@@ -46,6 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Source\ChildLink.cs" />
+     <Compile Include="Assets\Source\Joint.cs" />
+     <Compile Include="Assets\Source\Link.cs" />
+     <Compile Include="Assets\Source\RootLink.cs" />
      <Compile Include="Assets\Source\Spline.cs" />
      <Compile Include="Assets\Source\SplineObj.cs" />
      <Compile Include="Assets\Source\SplineTraveler.cs" />
