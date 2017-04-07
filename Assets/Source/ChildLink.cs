@@ -7,7 +7,7 @@ public class ChildLink : Link {
 	[SerializeField] Joint joint; // The joint which this link comes from
 	[SerializeField] Vector3 arcRot;
 	[SerializeField] Vector3 arcTrans;
-	[SerializeField] JointAnim anim = new JointAnim(); // The animation that will affect this link
+	[SerializeField] JointAnim anim; // The animation that will affect this link
 
 	// Use this for initialization
 	void Start() {
