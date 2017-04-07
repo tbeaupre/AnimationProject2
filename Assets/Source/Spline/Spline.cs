@@ -6,11 +6,13 @@ using UnityEngine;
 public class Spline{
 	public List<Vector3> poss;
 	public List<Vector3> tans;
+	public List<Quaternion> quats;
 	public int numCtrlPts;
 
 	public Spline (int numCtrlPts) {
 		this.numCtrlPts = numCtrlPts;
 		poss = new List<Vector3>(numCtrlPts);
+		quats = new List<Quaternion>(numCtrlPts);
 	}
 
 	public void Init()
@@ -34,6 +36,33 @@ public class Spline{
 			}
 			tans.Add(new Vector3(0, 0, 0));
 		}
+	}
+
+	public Quaternion CalcQuatAtTime(float t)
+	{
+		// Check to make sure the time is valid.
+		if (t > 1 || t < 0)
+		{
+			return new Quaternion(0, 0, 0, 0);
+		}
+		// Check corner cases for 0 and 1.
+		if (t == 1)
+		{
+			return quats[numCtrlPts - 1];
+		}
+		if (t == 0)
+		{
+			return quats[0];
+		}
+
+		float u = t * (numCtrlPts - 1); // u is now a value between 0 and the last control point.
+		int i = Mathf.FloorToInt(u); // i now represents the subsection of the spline to use.
+		u = u - i; // u now represents the u of the subsection of the spline.
+
+		Quaternion q1 = quats[i];
+		Quaternion q2 = quats[i + 1];
+
+		return Quaternion.Slerp(q1, q2, u);
 	}
 
 	// Calculates the position at the time t along the spline. 0 <= t <= 1

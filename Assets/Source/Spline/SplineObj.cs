@@ -30,6 +30,11 @@ public class SplineObj : MonoBehaviour {
 	{
 		return spline.CalcPosAtTime(t);
 	}
+
+	public Quaternion CalcQuatAtTime(float t)
+	{
+		return spline.CalcQuatAtTime(t);
+	}
 		
 	void DrawControlPoints()
 	{

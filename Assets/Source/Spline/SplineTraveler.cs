@@ -80,6 +80,7 @@ public class SplineTraveler : MonoBehaviour {
 	void SetTransforms(float t)
 	{
 		transform.position = curSpline.CalcPosAtTime(t);
+		transform.rotation = curSpline.CalcQuatAtTime(t);
 	}
 
 	void EndAnimation()
@@ -136,7 +137,8 @@ public class SplineTraveler : MonoBehaviour {
 
 				// Split up the XRot, YRot, and ZRot values of the control point
 				vals = GetNextString().Split(',');
-				// NOT INTERPOLATING ROTATIONS FOR THIS PROJECT
+				Vector3 euler = new Vector3(float.Parse(vals[0]), float.Parse(vals[1]), float.Parse(vals[2]));
+				spline.quats.Add(Quaternion.Euler(euler));
 			}
 			GameObject splineObj = (GameObject) Instantiate(splineObjPrefab);
 			splineObj.GetComponent<SplineObj>().Initialize(spline, time);
