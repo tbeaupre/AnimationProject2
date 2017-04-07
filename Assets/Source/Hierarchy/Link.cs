@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// A link in the model hierarchy
 public abstract class Link : MonoBehaviour {
 	[SerializeField] protected Vector3 modelRotation = new Vector3(0, 0, 0); // The model's rotation
 	[SerializeField] protected Vector3 modelOrigin = new Vector3(0, 0, 0); // The model's origin
 	[SerializeField] protected List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
 
 	// Use this for initialization
-	void Start () {
-		
-	}
+	void Start () { }
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
+	void Update () { }
 
-	protected virtual void Init(Link parent)
+	protected virtual void Init(Vector3 parentPos, Vector3 parentRot)
 	{
 		foreach (ChildLink child in this.children)
 		{
-			child.Init(this);
+			child.Init(transform.position, transform.eulerAngles);
 		}
 	}
 

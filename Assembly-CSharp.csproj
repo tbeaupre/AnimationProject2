@@ -46,17 +46,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Source\ChildLink.cs" />
-     <Compile Include="Assets\Source\Joint.cs" />
-     <Compile Include="Assets\Source\JointAnim.cs" />
-     <Compile Include="Assets\Source\Link.cs" />
-     <Compile Include="Assets\Source\RootLink.cs" />
-     <Compile Include="Assets\Source\Spline.cs" />
-     <Compile Include="Assets\Source\SplineObj.cs" />
-     <Compile Include="Assets\Source\SplineTraveler.cs" />
-     <Compile Include="Assets\Source\Test.cs" />
-     <Compile Include="Assets\Source\Test2.cs" />
-     <Compile Include="Assets\Source\Timer.cs" />
+     <Compile Include="Assets\Source\Hierarchy\ChildLink.cs" />
+     <Compile Include="Assets\Source\Hierarchy\Joint.cs" />
+     <Compile Include="Assets\Source\Hierarchy\JointAnim.cs" />
+     <Compile Include="Assets\Source\Hierarchy\Link.cs" />
+     <Compile Include="Assets\Source\Hierarchy\RootLink.cs" />
+     <Compile Include="Assets\Source\Hierarchy\WingAnim.cs" />
+     <Compile Include="Assets\Source\Spline\Spline.cs" />
+     <Compile Include="Assets\Source\Spline\SplineObj.cs" />
+     <Compile Include="Assets\Source\Spline\SplineTraveler.cs" />
+     <Compile Include="Assets\Source\Spline\Timer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
