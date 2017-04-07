@@ -16,11 +16,11 @@ public class ChildLink : Link {
 	}
 
 	// Initializes the link based on information about its parent
-	protected override void Init(Vector3 parentPos, Vector3 parentRot)
+	public void Init(Vector3 parentPos, Vector3 parentRot)
 	{
 		this.modelRotation = transform.eulerAngles - parentRot; // This is the base rotation for this link's model
 		this.joint = new Joint((transform.position + modelOrigin) - parentPos, this.anim); // Accounts for model origin and finds offset from parent
-		base.Init(parentPos, parentRot); // Initializes children
+		base.Init(); // Initializes children
 	}
 
 	// Updates the child's transforms based on joint's transformation

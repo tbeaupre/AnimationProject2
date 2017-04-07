@@ -14,7 +14,7 @@ public abstract class Link : MonoBehaviour {
 	// Update is called once per frame
 	void Update () { }
 
-	protected virtual void Init(Vector3 parentPos, Vector3 parentRot)
+	protected void Init()
 	{
 		foreach (ChildLink child in this.children)
 		{

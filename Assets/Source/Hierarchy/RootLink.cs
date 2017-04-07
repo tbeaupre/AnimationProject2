@@ -6,7 +6,7 @@ using UnityEngine;
 public class RootLink : Link {
 	// Use this for initialization
 	void Start () {
-		this.Init(transform.position, transform.eulerAngles);
+		this.Init(); // The values in here are bogus
 	}
 	
 	// Update is called once per frame
