@@ -11,6 +11,7 @@ public class RootLink : Link {
 	
 	// Update is called once per frame
 	void Update () {
+		this.rootTransform = this.transform;
 		this.UpdateLink(transform);
 		//this.UpdateLink(new Vector3(0, 0, 0), new Vector3(0, 0, 0));
 	}

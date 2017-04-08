@@ -7,7 +7,7 @@ public abstract class Link : MonoBehaviour {
 	[SerializeField] protected Vector3 modelRotation = new Vector3(0, 0, 0); // The model's rotation
 	[SerializeField] protected Vector3 parentOriginOffset = new Vector3(0, 0, 0); // This link's offset vector from the parent's mesh's origin
 	[SerializeField] protected List<ChildLink> children = new List<ChildLink>(); // The list of the link's children
-	protected Transform parentTransform;
+	protected Transform rootTransform;
 
 	// Use this for initialization
 	void Start () { }
@@ -23,9 +23,18 @@ public abstract class Link : MonoBehaviour {
 		}
 	}
 
+	public void UpdateLink(Transform rootTransform)
+	{
+		// Update each child node using the newly calculated rotations and translations
+		foreach (Link child in this.children)
+		{
+			child.UpdateLink(transform, rootTransform);
+		}
+	}
+
 	// Updates the link's position
-	public void UpdateLink(Transform parentTransform) {
-		this.parentTransform = parentTransform;
+	public void UpdateLink(Transform parentTransform, Transform rootTransform) {
+		this.rootTransform = rootTransform;
 		Vector3 parentPos = parentTransform.position;
 		Vector3 parentRot = parentTransform.eulerAngles;
 
@@ -44,7 +53,7 @@ public abstract class Link : MonoBehaviour {
 		// Update each child node using the newly calculated rotations and translations
 		foreach (Link child in this.children)
 		{
-			child.UpdateLink(transform);
+			child.UpdateLink(transform, rootTransform);
 		}
 	}
 
@@ -65,7 +74,9 @@ public abstract class Link : MonoBehaviour {
 	}
 
 	public void ParentTranslate(Vector3 parentPos, Vector3 parentRot) {
-		transform.position += parentPos;
+		//transform.position += parentPos;
+		Vector3 rotOffset = Quaternion.Euler(parentRot) * parentPos;
+		transform.position += rotOffset;
 	}
 
 	public void ParentRotate(Vector3 parentRot) {
@@ -75,16 +86,19 @@ public abstract class Link : MonoBehaviour {
 	// Rotates the model around a point in space using euler angles. Uses YZX order
 	public void Rotate(Vector3 euler)
 	{
-		//transform.Rotate(euler.x, 0, 0, Space.World);
-		//transform.Rotate(0, euler.y, 0, Space.World);
-		//transform.Rotate(0, 0, euler.z, Space.World);
+		transform.rotation *= Quaternion.AngleAxis(euler.y, rootTransform.up) *
+			Quaternion.AngleAxis(euler.z, rootTransform.forward) *
+			Quaternion.AngleAxis(euler.x, rootTransform.right);
 
-		//transform.rotation *= Quaternion.Euler(euler);
+		//SubRotate(euler.y, rootTransform.up);
+		//SubRotate(euler.z, rootTransform.forward);
+		//SubRotate(euler.x, rootTransform.right);
+	}
 
+	private void SubRotate(float angle, Vector3 direction)
+	{
 		Vector3 pos = transform.position;
-		Quaternion rotation = Quaternion.AngleAxis(euler.y, parentTransform.up) *
-			Quaternion.AngleAxis(euler.z, parentTransform.forward) *
-			Quaternion.AngleAxis(euler.x, parentTransform.right);
+		Quaternion rotation = Quaternion.AngleAxis(angle, direction);
 		pos = rotation * pos;
 		transform.position = pos;
 		transform.rotation *= rotation;
