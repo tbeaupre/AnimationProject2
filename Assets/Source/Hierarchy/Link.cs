@@ -43,12 +43,12 @@ public abstract class Link : MonoBehaviour {
 		transform.eulerAngles = modelRotation;
 
 		JointRotate();
-		JointTranslate();
+		//JointTranslate();
 
 		transform.position += parentOriginOffset;
 
-		ParentRotate(parentRot);
-		ParentTranslate(parentPos, parentRot);
+		ParentTranslate(parentPos, parentRot); // To parent's origen
+		ParentRotate(parentPos, parentRot); // Rotate around parent's origen
 
 		// Update each child node using the newly calculated rotations and translations
 		foreach (Link child in this.children)
@@ -74,13 +74,13 @@ public abstract class Link : MonoBehaviour {
 	}
 
 	public void ParentTranslate(Vector3 parentPos, Vector3 parentRot) {
-		//transform.position += parentPos;
-		Vector3 rotOffset = Quaternion.Euler(parentRot) * parentPos;
-		transform.position += rotOffset;
+		transform.position += parentPos;
+		//Vector3 rotOffset = Quaternion.Euler(parentRot) * parentPos;
+		//transform.position += rotOffset;
 	}
 
-	public void ParentRotate(Vector3 parentRot) {
-		Rotate(parentRot);
+	public void ParentRotate(Vector3 parentPos, Vector3 parentRot) {
+		RotateAboutPoint(parentPos, parentRot);
 	}
 
 	// Rotates the model around a point in space using euler angles. Uses YZX order
@@ -93,6 +93,19 @@ public abstract class Link : MonoBehaviour {
 		//SubRotate(euler.y, rootTransform.up);
 		//SubRotate(euler.z, rootTransform.forward);
 		//SubRotate(euler.x, rootTransform.right);
+	}
+
+	public void RotateAboutPoint(Vector3 point, Vector3 euler)
+	{
+		Vector3 v1 = transform.position;
+		Quaternion rotation = Quaternion.AngleAxis(euler.y, rootTransform.up) *
+			Quaternion.AngleAxis(euler.z, rootTransform.forward) *
+			Quaternion.AngleAxis(euler.x, rootTransform.right);
+		Vector3 v2 = v1 - point;
+		v2 = rotation * v2;
+		v1 = point + v2;
+		transform.position = v1;
+		transform.rotation *= rotation;
 	}
 
 	private void SubRotate(float angle, Vector3 direction)
