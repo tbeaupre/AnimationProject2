@@ -89,10 +89,6 @@ public abstract class Link : MonoBehaviour {
 		transform.rotation *= Quaternion.AngleAxis(euler.y, rootTransform.up) *
 			Quaternion.AngleAxis(euler.z, rootTransform.forward) *
 			Quaternion.AngleAxis(euler.x, rootTransform.right);
-
-		//SubRotate(euler.y, rootTransform.up);
-		//SubRotate(euler.z, rootTransform.forward);
-		//SubRotate(euler.x, rootTransform.right);
 	}
 
 	public void RotateAboutPoint(Vector3 point, Vector3 euler)
@@ -106,19 +102,5 @@ public abstract class Link : MonoBehaviour {
 		v1 = point + v2;
 		transform.position = v1;
 		transform.rotation *= rotation;
-	}
-
-	private void SubRotate(float angle, Vector3 direction)
-	{
-		Vector3 pos = transform.position;
-		Quaternion rotation = Quaternion.AngleAxis(angle, direction);
-		pos = rotation * pos;
-		transform.position = pos;
-		transform.rotation *= rotation;
-	}
-
-	public virtual void Translate(Vector3 offset)
-	{
-		transform.position += offset;
 	}
 }
