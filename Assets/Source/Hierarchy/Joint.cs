@@ -15,9 +15,7 @@ public class Joint {
 
 	// Updates the link's transformations based on the animation
 	public void Update () {
-		this.rotation = new Vector3(0, 0, 20);
-		// FOR TESTING PURPOSES
-		// this.rotation = anim.GetRotation();
+		this.rotation = anim.GetRotation();
 		this.translation = anim.GetTranslation();
 	}
 
@@ -26,8 +24,8 @@ public class Joint {
 		return this.translation;
 	}
 
-	public Quaternion GetRotation()
+	public Vector3 GetRotation()
 	{
-		return Quaternion.Euler(this.rotation);
+		return this.rotation;
 	}
 }

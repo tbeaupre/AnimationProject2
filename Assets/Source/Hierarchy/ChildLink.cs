@@ -23,12 +23,16 @@ public class ChildLink : Link {
 		base.Init(); // Initializes children
 	}
 
-	// Updates the child's transforms based on joint's transformation
-	public override void JointTransforms()
+	// Updates the child's transforms based on joint's translation
+	public override void JointTranslate()
+	{
+		transform.position += joint.GetTranslation();
+	}
+
+	// Updates the child's transforms based on joint's rotation
+	public override void JointRotate()
 	{
 		joint.Update(); // Since the joint isn't a MonoBehavior and doesn't get updated automatically
-		transform.rotation *= joint.GetRotation();
-		//transform.Rotate(joint.GetRotation(), Space.World);
-		//transform.Translate(joint.GetTranslation() + parentOriginOffset);
+		Rotate(joint.GetRotation());
 	}
 }
